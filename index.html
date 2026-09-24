@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Tắc Kè Translator 🦎</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at top left, #253b2b 0%, transparent 35%),
+                radial-gradient(circle at bottom right, #17251c 0%, transparent 40%),
+                #0b100d;
+            color: white;
+            padding: 25px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 65px;
+            margin-bottom: 5px;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 8px;
+            color: #a8ffb5;
+        }
+
+        .subtitle {
+            color: #aeb8b1;
+            font-size: 15px;
+        }
+
+        .translator {
+            background: rgba(20, 29, 23, 0.92);
+            border: 1px solid #304336;
+            border-radius: 22px;
+            padding: 25px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+        }
+
+        .language-row {
+            display: grid;
+            grid-template-columns: 1fr 70px 1fr;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .language {
+            background: #18231c;
+            border: 1px solid #354b3a;
+            border-radius: 12px;
+            padding: 13px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .swap {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            border: none;
+            background: #9cffaa;
+            color: #102015;
+            font-size: 23px;
+            cursor: pointer;
+            margin: auto;
+            transition: 0.2s;
+        }
+
+        .swap:hover {
+            transform: rotate(180deg);
+            background: #c4ffcc;
+        }
+
+        .boxes {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .box {
+            background: #111a14;
+            border: 1px solid #34483a;
+            border-radius: 17px;
+            overflow: hidden;
+        }
+
+        .box-title {
+            padding: 13px 16px;
+            background: #18251c;
+            color: #b9ffc3;
+            font-weight: bold;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 220px;
+            resize: vertical;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: white;
+            padding: 18px;
+            font-size: 17px;
+            line-height: 1.6;
+        }
+
+        textarea::placeholder {
+            color: #69756d;
+        }
+
+        .result {
+            min-height: 220px;
+            padding: 18px;
+            font-size: 18px;
+            line-height: 1.7;
+            color: #d8ffdd;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .empty {
+            color: #657168;
+        }
+
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button.action {
+            border: none;
+            border-radius: 12px;
+            padding: 13px 18px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        button.action:hover {
+            transform: translateY(-2px);
+        }
+
+        .translate-btn {
+            background: #9cffaa;
+            color: #102015;
+        }
+
+        .sound-btn {
+            background: #d5a8ff;
+            color: #24102f;
+        }
+
+        .copy-btn {
+            background: #87c8ff;
+            color: #102235;
+        }
+
+        .clear-btn {
+            background: #ff8f8f;
+            color: #321010;
+        }
+
+        .info {
+            margin-top: 25px;
+            padding: 18px;
+            border-radius: 15px;
+            background: #121c15;
+            border: 1px solid #2e4033;
+            color: #9daaa1;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .examples {
+            margin-top: 20px;
+        }
+
+        .examples h3 {
+            color: #b9ffc3;
+            margin-bottom: 10px;
+        }
+
+        .example-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .example {
+            background: #1a281e;
+            border: 1px solid #344b3a;
+            color: #d4e8d8;
+            border-radius: 20px;
+            padding: 8px 13px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .example:hover {
+            background: #25382a;
+        }
+
+        .footer {
+            text-align: center;
+            color: #68756d;
+            margin-top: 25px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 700px) {
+            body {
+                padding: 14px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .logo {
+                font-size: 50px;
+            }
+
+            .boxes {
+                grid-template-columns: 1fr;
+            }
+
+            .language-row {
+                grid-template-columns: 1fr;
+            }
+
+            .swap {
+                transform: rotate(90deg);
+            }
+
+            .swap:hover {
+                transform: rotate(270deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <div class="logo">🦎</div>
+        <h1>Tắc Kè Translator</h1>
+        <div class="subtitle">
+            Bộ dịch Việt Nam ↔ Ngôn ngữ Tắc Kè
+        </div>
+    </div>
+
+    <div class="translator">
+
+        <div class="language-row">
+            <div class="language" id="sourceLanguage">
+                🇻🇳 Tiếng Việt
+            </div>
+
+            <button class="swap" onclick="swapLanguage()" title="Đổi ngôn ngữ">
+                ⇄
+            </button>
+
+            <div class="language" id="targetLanguage">
+                🦎 Tiếng Tắc Kè
+            </div>
+        </div>
+
+        <div class="boxes">
+
+            <div class="box">
+                <div class="box-title">
+                    ✏️ Nhập văn bản
+                </div>
+
+                <textarea
+                    id="inputText"
+                    placeholder="Nhập câu tiếng Việt ở đây..."
+                    oninput="autoTranslate()"
+                ></textarea>
+            </div>
+
+            <div class="box">
+                <div class="box-title">
+                    🦎 Kết quả
+                </div>
+
+                <div id="result" class="result empty">
+                    Kết quả dịch sẽ xuất hiện ở đây...
+                </div>
+            </div>
+
+        </div>
+
+        <div class="buttons">
+
+            <button class="action translate-btn" onclick="translateText()">
+                🦎 Dịch ngay
+            </button>
+
+            <button class="action sound-btn" onclick="speakResult()">
+                🔊 Đọc Tắc Kè
+            </button>
+
+            <button class="action copy-btn" onclick="copyResult()">
+                📋 Sao chép
+            </button>
+
+            <button class="action clear-btn" onclick="clearText()">
+                🗑️ Xóa
+            </button>
+
+        </div>
+
+        <div class="examples">
+
+            <h3>💬 Câu mẫu</h3>
+
+            <div class="example-list">
+
+                <button class="example" onclick="useExample('Xin chào')">
+                    Xin chào
+                </button>
+
+                <button class="example" onclick="useExample('Cảm ơn')">
+                    Cảm ơn
+                </button>
+
+                <button class="example" onclick="useExample('Bạn khỏe không?')">
+                    Bạn khỏe không?
+                </button>
+
+                <button class="example" onclick="useExample('Tôi đói')">
+                    Tôi đói
+                </button>
+
+                <button class="example" onclick="useExample('Tôi yêu bạn')">
+                    Tôi yêu bạn
+                </button>
+
+                <button class="example" onclick="useExample('Tạm biệt')">
+                    Tạm biệt
+                </button>
+
+                <button class="example" onclick="useExample('Chúc ngủ ngon')">
+                    Chúc ngủ ngon
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="info">
+            💡 <b>Thông tin:</b>
+            Đây là ngôn ngữ Tắc Kè hư cấu dùng để giải trí.
+            Bạn có thể thêm hoặc sửa từ điển trong phần JavaScript bên dưới.
+        </div>
+
+    </div>
+
+    <div class="footer">
+        🦎 Tắc Kè Translator • Made with HTML, CSS & JavaScript
+    </div>
+
+</div>
+
+
+<script>
+
+    // ==========================================
+    // TỪ ĐIỂN TẮC KÈ
+    // ==========================================
+
+    const dictionary = {
+
+        "xin chào": "Kéc kéc! 🦎",
+        "chào": "Kéc kéc! 🦎",
+
+        "cảm ơn": "Kéc-kéc cảm ơn! 💚",
+        "thank you": "Kéc-kéc cảm ơn! 💚",
+
+        "bạn khỏe không": "Kéc ka kéc?",
+        "bạn khỏe không?": "Kéc ka kéc?",
+
+        "tôi khỏe": "Kéc kéc, tôi khỏe!",
+        "tôi ổn": "Kéc kéc, tôi ổn!",
+
+        "tôi đói": "Kéc aaa... bụng kêu kéc kéc! 🍗",
+        "đói": "Kéc aaa... đói quá! 🍗",
+
+        "tôi khát": "Kéc kéc... khát nước! 💧",
+        "khát": "Kéc kéc... khát nước! 💧",
+
+        "tôi yêu bạn": "Kéc kéc yêu bạn! ❤️",
+        "yêu bạn": "Kéc kéc yêu bạn! ❤️",
+
+        "tạm biệt": "Kéc kéc, bye bye! 👋",
+        "bye": "Kéc kéc, bye bye! 👋",
+
+        "chúc ngủ ngon": "Kéc kéc... ngủ ngon nha! 🌙",
+        "ngủ ngon": "Kéc kéc... ngủ ngon! 🌙",
+
+        "xin lỗi": "Kéc... xin lỗi nha! 🥺",
+        "không sao": "Kéc kéc, không sao đâu! 😎",
+
+        "có": "Kéc!",
+        "không": "Kéc... không.",
+
+        "đúng": "Kéc kéc, chính xác!",
+        "sai": "Kéc kéc... sai rồi!",
+
+        "được": "Kéc! Được luôn!",
+        "không được": "Kéc... không được!",
+
+        "đi đâu": "Kéc? Đi đâu đó?",
+        "bạn đang làm gì": "Kéc kéc? Đang làm gì đó?",
+
+        "tên bạn là gì": "Kéc kéc! Tôi là Tắc Kè Translator! 🦎",
+
+        "hôm nay": "Kéc kéc! Hôm nay thật tuyệt! ☀️",
+
+        "haha": "Kéc kéc kéc 😂",
+        "hahaha": "Kéc kéc kéc 😂",
+
+        "buồn": "Kéc... đừng buồn nha. 💚",
+        "vui": "Kéc kéc! Vui quá! 🎉",
+
+        "ok": "Kéc! OK!",
+        "oke": "Kéc! OK!",
+
+        "hello": "Kéc kéc! 🦎",
+        "hi": "Kéc kéc! 🦎"
+
+    };
+
+
+    // ==========================================
+    // TRẠNG THÁI
+    // ==========================================
+
+    let vietnameseToTacke = true;
+
+
+    // ==========================================
+    // DỊCH
+    // ==========================================
+
+    function translateText() {
+
+        const input = document
+            .getElementById("inputText")
+            .value
+            .trim();
+
+        const result = document.getElementById("result");
+
+        if (input === "") {
+
+            result.textContent =
+                "Kéc kéc... hãy nhập gì đó trước nhé! 🦎";
+
+            result.classList.remove("empty");
+
+            return;
+        }
+
+        let translated = "";
+
+        if (vietnameseToTacke) {
+
+            translated = translateVietnamese(input);
+
+        } else {
+
+            translated = translateTacke(input);
+
+        }
+
+        result.textContent = translated;
+        result.classList.remove("empty");
+    }
+
+
+    // ==========================================
+    // VIỆT → TẮC KÈ
+    // ==========================================
+
+    function translateVietnamese(text) {
+
+        const normalized = text
+            .toLowerCase()
+            .trim()
+            .replace(/[.!?,]+$/g, "");
+
+        if (dictionary[normalized]) {
+            return dictionary[normalized];
+        }
+
+        // Tách câu thành từ và thay thế những từ biết
+        let words = normalized.split(/\s+/);
+
+        let translatedWords = words.map(word => {
+
+            if (dictionary[word]) {
+                return dictionary[word];
+            }
+
+            return word;
+
+        });
+
+        const result = translatedWords.join(" ");
+
+        // Nếu không có từ nào được dịch
+        if (result === normalized) {
+
+            return "Kéc kéc... 🦎\n\n" +
+                   "Tôi chưa biết câu này.\n" +
+                   "Bạn có thể thêm câu mới vào từ điển.";
+
+        }
+
+        return result;
+    }
+
+
+    // ==========================================
+    // TẮC KÈ → VIỆT
+    // ==========================================
+
+    function translateTacke(text) {
+
+        const lower = text.toLowerCase().trim();
+
+        const tackeDictionary = {
+
+            "kéc kéc! 🦎": "Xin chào!",
+            "kéc kéc!": "Xin chào!",
+            "kéc-kéc cảm ơn! 💚": "Cảm ơn!",
+            "kéc ka kéc?": "Bạn khỏe không?",
+            "kéc kéc, tôi khỏe!": "Tôi khỏe!",
+            "kéc kéc, tôi ổn!": "Tôi ổn!",
+            "kéc aaa... bụng kêu kéc kéc! 🍗": "Tôi đói!",
+            "kéc aaa... đói quá! 🍗": "Đói quá!",
+            "kéc kéc... khát nước! 💧": "Tôi khát!",
+            "kéc kéc yêu bạn! ❤️": "Tôi yêu bạn!",
+            "kéc kéc, bye bye! 👋": "Tạm biệt!",
+            "kéc kéc... ngủ ngon nha! 🌙": "Chúc ngủ ngon!",
+            "kéc kéc... ngủ ngon! 🌙": "Ngủ ngon!",
+            "kéc... xin lỗi nha! 🥺": "Xin lỗi!",
+            "kéc kéc, không sao đâu! 😎": "Không sao!",
+            "kéc!": "Có!",
+            "kéc... không.": "Không!",
+            "kéc kéc, chính xác!": "Đúng!",
+            "kéc kéc... sai rồi!": "Sai rồi!",
+            "kéc! được luôn!": "Được!",
+            "kéc... không được!": "Không được!",
+            "kéc? đi đâu đó?": "Đi đâu đó?",
+            "kéc kéc! tôi là tắc kè translator! 🦎":
+                "Tôi là Tắc Kè Translator!",
+            "kéc kéc kéc 😂": "Hahaha!",
+            "kéc... đừng buồn nha. 💚": "Đừng buồn nha.",
+            "kéc kéc! vui quá! 🎉": "Vui quá!",
+            "kéc! ok!": "OK!"
+
+        };
+
+        if (tackeDictionary[lower]) {
+            return tackeDictionary[lower];
+        }
+
+        return "Tôi chưa hiểu câu Tắc Kè này. 🦎";
+    }
+
+
+    // ==========================================
+    // TỰ ĐỘNG DỊCH
+    // ==========================================
+
+    function autoTranslate() {
+
+        const input = document
+            .getElementById("inputText")
+            .value
+            .trim();
+
+        if (input.length > 0) {
+
+            translateText();
+
+        } else {
+
+            const result = document.getElementById("result");
+
+            result.textContent =
+                "Kết quả dịch sẽ xuất hiện ở đây...";
+
+            result.classList.add("empty");
+        }
+    }
+
+
+    // ==========================================
+    // ĐỔI CHIỀU NGÔN NGỮ
+    // ==========================================
+
+    function swapLanguage() {
+
+        vietnameseToTacke = !vietnameseToTacke;
+
+        const source =
+            document.getElementById("sourceLanguage");
+
+        const target =
+            document.getElementById("targetLanguage");
+
+        if (vietnameseToTacke) {
+
+            source.textContent = "🇻🇳 Tiếng Việt";
+            target.textContent = "🦎 Tiếng Tắc Kè";
+
+        } else {
+
+            source.textContent = "🦎 Tiếng Tắc Kè";
+            target.textContent = "🇻🇳 Tiếng Việt";
+        }
+
+        const input =
+            document.getElementById("inputText");
+
+        const result =
+            document.getElementById("result");
+
+        // Đổi nội dung nhập và kết quả
+        const oldInput = input.value;
+
+        input.value =
+            result.classList.contains("empty")
+                ? ""
+                : result.textContent;
+
+        if (oldInput !== "") {
+
+            result.textContent = oldInput;
+            result.classList.remove("empty");
+
+        } else {
+
+            result.textContent =
+                "Kết quả dịch sẽ xuất hiện ở đây...";
+
+            result.classList.add("empty");
+        }
+    }
+
+
+    // ==========================================
+    // ĐỌC KẾT QUẢ
+    // ==========================================
+
+    function speakResult() {
+
+        const result =
+            document.getElementById("result").textContent;
+
+        if (
+            !result ||
+            document
+                .getElementById("result")
+                .classList
+                .contains("empty")
+        ) {
+
+            alert("Chưa có nội dung để đọc!");
+
+            return;
+        }
+
+        if (!("speechSynthesis" in window)) {
+
+            alert(
+                "Trình duyệt của bạn không hỗ trợ đọc văn bản."
+            );
+
+            return;
+        }
+
+        window.speechSynthesis.cancel();
+
+        const speech =
+            new SpeechSynthesisUtterance(result);
+
+        speech.lang = "vi-VN";
+        speech.rate = 0.85;
+        speech.pitch = 1.2;
+        speech.volume = 1;
+
+        window.speechSynthesis.speak(speech);
+    }
+
+
+    // ==========================================
+    // SAO CHÉP
+    // ==========================================
+
+    async function copyResult() {
+
+        const result =
+            document.getElementById("result").textContent;
+
+        if (
+            !result ||
+            document
+                .getElementById("result")
+                .classList
+                .contains("empty")
+        ) {
+
+            alert("Chưa có nội dung để sao chép!");
+
+            return;
+        }
+
+        try {
+
+            await navigator.clipboard.writeText(result);
+
+            alert("✅ Đã sao chép kết quả!");
+
+        } catch (error) {
+
+            alert("Không thể sao chép tự động.");
+
+        }
+    }
+
+
+    // ==========================================
+    // XÓA
+    // ==========================================
+
+    function clearText() {
+
+        document.getElementById("inputText").value = "";
+
+        const result =
+            document.getElementById("result");
+
+        result.textContent =
+            "Kết quả dịch sẽ xuất hiện ở đây...";
+
+        result.classList.add("empty");
+
+        window.speechSynthesis.cancel();
+    }
+
+
+    // ==========================================
+    // CÂU MẪU
+    // ==========================================
+
+    function useExample(text) {
+
+        const input =
+            document.getElementById("inputText");
+
+        input.value = text;
+
+        translateText();
+
+        input.focus();
+    }
+
+</script>
+
+</body>
+</html>
